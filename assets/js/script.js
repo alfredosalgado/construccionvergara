@@ -140,7 +140,7 @@ function initContactForm() {
                 `Mensaje: ${message}`;
             
             // Open WhatsApp
-            const whatsappURL = `https://wa.me/56920897688?text=${whatsappMessage}`;
+            const whatsappURL = `https://wa.me/56982677580?text=${whatsappMessage}`;
             window.open(whatsappURL, '_blank');
             
             // Show success message
