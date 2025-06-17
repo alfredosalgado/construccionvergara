@@ -312,18 +312,278 @@ function initAnimationsOnScroll() {
     });
 }
 
-// Gallery Functionality
-function initGallery() {
-    const galleryItems = document.querySelectorAll('.gallery-item');
+// Gallery functionality with carousel
+    function initGallery() {
+        // CONFIGURACIÓN: Cambia este número según la cantidad de imágenes en la carpeta galeria
+        const TOTAL_IMAGES = 29; // Número total de imágenes en la carpeta galeria
+        const AUTO_ADVANCE_INTERVAL = 4000; // Tiempo en milisegundos para avance automático (4 segundos)
+        
+        const galleryContainer = document.querySelector('.gallery-container');
+        const modal = document.getElementById('galleryModal');
+        const modalImg = document.getElementById('modalImage');
+        const closeModal = document.querySelector('.modal-close');
+        const prevModalBtn = document.querySelector('.modal-prev');
+        const nextModalBtn = document.querySelector('.modal-next');
+        const prevCarouselBtn = document.querySelector('.gallery-prev');
+        const nextCarouselBtn = document.querySelector('.gallery-next');
+        const indicators = document.querySelector('.gallery-indicators');
+        
+        let currentCarouselIndex = 0;
+        let currentModalIndex = 0;
+        let imagesPerView = getImagesPerView();
+        let totalSlides = Math.ceil(TOTAL_IMAGES / imagesPerView);
+        let autoAdvanceTimer = null;
+        let isUserInteracting = false;
+        
+        // Función para obtener el número de imágenes por vista según el tamaño de pantalla
+        function getImagesPerView() {
+            const width = window.innerWidth;
+            if (width >= 768) {
+                return 4; // PC/Desktop - mostrar 4 imágenes
+            } else {
+                return 2; // Mobile - mostrar 2 imágenes
+            }
+        }
     
-    galleryItems.forEach(item => {
-        item.addEventListener('click', function() {
-            const img = this.querySelector('img');
-            if (img) {
-                openLightbox(img.src, img.alt);
+    // Generar las imágenes dinámicamente para el slide actual
+    function generateGalleryImages() {
+        galleryContainer.innerHTML = '';
+        
+        // Calcular qué imágenes mostrar en el slide actual
+        const startIndex = currentCarouselIndex * imagesPerView;
+        const endIndex = Math.min(startIndex + imagesPerView, TOTAL_IMAGES);
+        
+        for (let i = startIndex; i < endIndex; i++) {
+            const imageNumber = i + 1;
+            const galleryItem = document.createElement('div');
+            galleryItem.className = 'gallery-item';
+            galleryItem.innerHTML = `
+                <img src="./assets/img/galeria/${imageNumber}.jpg" alt="Proyecto ${imageNumber}" loading="lazy">
+                <div class="gallery-overlay">
+                    <i class="fas fa-search-plus"></i>
+                </div>
+            `;
+            
+            // Agregar evento click para abrir modal
+            galleryItem.addEventListener('click', () => {
+                openModal(i);
+            });
+            
+            galleryContainer.appendChild(galleryItem);
+        }
+    }
+    
+    // Generar indicadores del carrusel
+        function generateIndicators() {
+            if (!indicators) return;
+            
+            indicators.innerHTML = '';
+            for (let i = 0; i < totalSlides; i++) {
+                const indicator = document.createElement('span');
+                indicator.className = 'gallery-indicator';
+                if (i === 0) indicator.classList.add('active');
+                indicators.appendChild(indicator);
+            }
+            // Agregar event listeners después de crear los indicadores
+            attachIndicatorListeners();
+        }
+    
+    // Actualizar vista del carrusel
+    function updateCarousel() {
+        // Regenerar las imágenes para el slide actual
+        generateGalleryImages();
+        
+        // Actualizar indicadores
+        const allIndicators = document.querySelectorAll('.gallery-indicator');
+        allIndicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === currentCarouselIndex);
+        });
+    }
+    
+    // Ir a slide específico
+    function goToSlide(index) {
+        currentCarouselIndex = index;
+        updateCarousel();
+    }
+    
+    // Funciones para el avance automático
+        function startAutoAdvance() {
+            if (autoAdvanceTimer) {
+                clearInterval(autoAdvanceTimer);
+            }
+            autoAdvanceTimer = setInterval(() => {
+                if (!isUserInteracting && totalSlides > 1) {
+                    nextSlide();
+                }
+            }, AUTO_ADVANCE_INTERVAL);
+        }
+        
+        function stopAutoAdvance() {
+            if (autoAdvanceTimer) {
+                clearInterval(autoAdvanceTimer);
+                autoAdvanceTimer = null;
+            }
+        }
+        
+        function resetAutoAdvance() {
+            stopAutoAdvance();
+            setTimeout(() => {
+                if (!isUserInteracting) {
+                    startAutoAdvance();
+                }
+            }, 1000); // Espera 1 segundo antes de reanudar
+        }
+        
+        // Navegación del carrusel
+        function nextSlide() {
+            currentCarouselIndex = (currentCarouselIndex + 1) % totalSlides;
+            updateCarousel();
+        }
+        
+        function prevSlide() {
+            currentCarouselIndex = (currentCarouselIndex - 1 + totalSlides) % totalSlides;
+            updateCarousel();
+        }
+        
+        // Ir a un slide específico
+        function goToSlide(index) {
+            currentCarouselIndex = index;
+            updateCarousel();
+        }
+    
+    // Abrir modal
+    function openModal(imageIndex) {
+        currentModalIndex = imageIndex;
+        modalImg.src = `./assets/img/galeria/${imageIndex + 1}.jpg`;
+        modalImg.alt = `Proyecto ${imageIndex + 1}`;
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    }
+    
+    // Cerrar modal
+    function closeModalFunc() {
+        modal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+    
+    // Navegación del modal
+    function nextModalImage() {
+        currentModalIndex = (currentModalIndex + 1) % TOTAL_IMAGES;
+        modalImg.src = `./assets/img/galeria/${currentModalIndex + 1}.jpg`;
+        modalImg.alt = `Proyecto ${currentModalIndex + 1}`;
+    }
+    
+    function prevModalImage() {
+        currentModalIndex = (currentModalIndex - 1 + TOTAL_IMAGES) % TOTAL_IMAGES;
+        modalImg.src = `./assets/img/galeria/${currentModalIndex + 1}.jpg`;
+        modalImg.alt = `Proyecto ${currentModalIndex + 1}`;
+    }
+    
+    // Event listeners para el carrusel con control de auto-avance
+        if (nextCarouselBtn) {
+            nextCarouselBtn.addEventListener('click', () => {
+                isUserInteracting = true;
+                nextSlide();
+                resetAutoAdvance();
+                setTimeout(() => { isUserInteracting = false; }, 500);
+            });
+        }
+        
+        if (prevCarouselBtn) {
+            prevCarouselBtn.addEventListener('click', () => {
+                isUserInteracting = true;
+                prevSlide();
+                resetAutoAdvance();
+                setTimeout(() => { isUserInteracting = false; }, 500);
+            });
+        }
+        
+        // Event listeners para indicadores
+        function attachIndicatorListeners() {
+            const allIndicators = document.querySelectorAll('.gallery-indicator');
+            allIndicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    isUserInteracting = true;
+                    goToSlide(index);
+                    resetAutoAdvance();
+                    setTimeout(() => { isUserInteracting = false; }, 500);
+                });
+            });
+        }
+    
+    // Event listeners para el modal
+    if (closeModal) {
+        closeModal.addEventListener('click', closeModalFunc);
+    }
+    
+    if (nextModalBtn) {
+        nextModalBtn.addEventListener('click', nextModalImage);
+    }
+    
+    if (prevModalBtn) {
+        prevModalBtn.addEventListener('click', prevModalImage);
+    }
+    
+    // Cerrar modal al hacer click fuera de la imagen
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModalFunc();
             }
         });
+    }
+    
+    // Navegación con teclado
+    document.addEventListener('keydown', (e) => {
+        if (modal.style.display === 'flex') {
+            if (e.key === 'Escape') {
+                closeModalFunc();
+            } else if (e.key === 'ArrowRight') {
+                nextModalImage();
+            } else if (e.key === 'ArrowLeft') {
+                prevModalImage();
+            }
+        }
     });
+    
+    // Manejar cambios de tamaño de ventana
+    function handleResize() {
+        const newImagesPerView = getImagesPerView();
+        if (newImagesPerView !== imagesPerView) {
+            imagesPerView = newImagesPerView;
+            totalSlides = Math.ceil(TOTAL_IMAGES / imagesPerView);
+            // Asegurar que el índice actual sea válido
+            if (currentCarouselIndex >= totalSlides) {
+                currentCarouselIndex = totalSlides - 1;
+            }
+            generateIndicators();
+            updateCarousel();
+        }
+    }
+    
+    window.addEventListener('resize', debounce(handleResize, 250));
+    
+    // Event listeners para pausar auto-avance en hover
+    if (galleryContainer) {
+        galleryContainer.addEventListener('mouseenter', () => {
+            isUserInteracting = true;
+            stopAutoAdvance();
+        });
+        
+        galleryContainer.addEventListener('mouseleave', () => {
+            isUserInteracting = false;
+            startAutoAdvance();
+        });
+    }
+    
+    // Inicializar galería
+    generateIndicators();
+    updateCarousel();
+    
+    // Iniciar auto-avance si hay más de una imagen
+    if (totalSlides > 1) {
+        startAutoAdvance();
+    }
 }
 
 // Lightbox for Gallery

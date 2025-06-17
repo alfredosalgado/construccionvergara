@@ -5,17 +5,35 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Construcciones Vergara – Tradición y Calidad en Construcción</title>
     <meta name="description" content="Construcciones Vergara - Expertos en servicios integrales para tu hogar desde hace más de cuatro décadas. Gasfitería, carpintería, pintura y más.">
+    <meta name="keywords" content="construcción, gasfitería, carpintería, pintura, piso flotante, ampliaciones, destapes, Santiago, Peñalolén">
+    <meta name="author" content="Construcciones Vergara">
+    <meta property="og:title" content="Construcciones Vergara – Tradición y Calidad en Construcción">
+    <meta property="og:description" content="Expertos en servicios integrales para tu hogar desde hace más de cuatro décadas">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://construccionesvergara.cl">
+    <meta property="og:image" content="./assets/img/logo.jpeg">
+    <link rel="canonical" href="https://construccionesvergara.cl">
     <link rel="stylesheet" href="./assets/css/style.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Montserrat:wght@600;700&display=swap" rel="stylesheet">
+    
+    <!-- Google Analytics - Reemplazar GA_MEASUREMENT_ID con tu ID real -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'GA_MEASUREMENT_ID');
+    </script>
 </head>
 <body>
     <!-- Header -->
     <header id="header" class="header">
         <nav class="navbar">
             <div class="nav-container">
+                <!-- Logo reemplazado por imagen -->
                 <div class="nav-logo">
-                    <h2>Construcciones Vergara</h2>
+                    <img src="./assets/img/logos/logo.jpeg" alt="Construcciones Vergara Logo" class="logo-img">
                 </div>
                 <ul class="nav-menu">
                     <li class="nav-item">
@@ -79,7 +97,7 @@
                 </div>
             </div>
             
-            <!-- Mission, Vision, Values -->
+            <!-- Mission, Vision, Values - Centrados en todas las pantallas -->
             <div class="mvv-section">
                 <div class="mvv-item">
                     <h3><i class="fas fa-bullseye"></i> Misión</h3>
@@ -139,7 +157,7 @@
             <div class="services-grid">
                 <div class="service-card">
                     <div class="service-image">
-                        <img src="./assets/img/gasfiteria.jpg" alt="Gasfitería">
+                        <img src="./assets/img/servicios/gasfiteria.jpg" alt="Gasfitería">
                     </div>
                     <div class="service-content">
                         <h3><i class="fas fa-wrench"></i> Gasfitería</h3>
@@ -152,7 +170,7 @@
 
                 <div class="service-card">
                     <div class="service-image">
-                        <img src="./assets/img/carpinteria.jpeg" alt="Carpintería">
+                        <img src="./assets/img/servicios/carpinteria.jpeg" alt="Carpintería">
                     </div>
                     <div class="service-content">
                         <h3><i class="fas fa-hammer"></i> Carpintería</h3>
@@ -165,7 +183,7 @@
 
                 <div class="service-card">
                     <div class="service-image">
-                        <img src="./assets/img/pintura.jpg" alt="Pintura">
+                        <img src="./assets/img/servicios/pintura.jpg" alt="Pintura">
                     </div>
                     <div class="service-content">
                         <h3><i class="fas fa-paint-roller"></i> Pintura</h3>
@@ -191,7 +209,7 @@
 
                 <div class="service-card">
                     <div class="service-image">
-                        <img src="./assets/img/ampliaciones.jpg" alt="Ampliaciones">
+                        <img src="./assets/img/servicios/ampliaciones.jpg" alt="Ampliaciones">
                     </div>
                     <div class="service-content">
                         <h3><i class="fas fa-home"></i> Ampliaciones en General</h3>
@@ -204,7 +222,7 @@
 
                 <div class="service-card">
                     <div class="service-image">
-                        <img src="./assets/img/destapes.jpg" alt="Destapes">
+                        <img src="./assets/img/servicios/destapes.jpg" alt="Destapes">
                     </div>
                     <div class="service-content">
                         <h3><i class="fas fa-tools"></i> Destapes en General</h3>
@@ -314,7 +332,7 @@
         </div>
     </section>
 
-    <!-- Gallery Section -->
+    <!-- Gallery Section - Nuevo carrusel con modal -->
     <section id="galeria" class="gallery">
         <div class="container">
             <div class="section-header">
@@ -322,34 +340,46 @@
                 <div class="section-divider"></div>
                 <p>Algunos de nuestros proyectos realizados</p>
             </div>
-            <div class="gallery-grid">
-                <div class="gallery-item">
-                    <img src="./assets/img/herramientas.jpg" alt="Proyecto 1">
-                    <div class="gallery-overlay">
-                        <h3>Herramientas Profesionales</h3>
-                        <p>Equipamiento de calidad para cada trabajo</p>
-                    </div>
+            
+            <!-- Carrusel de galería -->
+            <div class="gallery-carousel">
+                <div class="gallery-container" id="galleryContainer">
+                    <!-- Las imágenes se cargarán dinámicamente con JavaScript -->
                 </div>
-                <div class="gallery-item">
-                    <img src="./assets/img/calidad.jpg" alt="Proyecto 2">
-                    <div class="gallery-overlay">
-                        <h3>Trabajo de Calidad</h3>
-                        <p>Acabados profesionales garantizados</p>
-                    </div>
+                
+                <!-- Controles del carrusel -->
+                <div class="gallery-controls">
+                    <button class="gallery-btn gallery-prev" id="galleryPrev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="gallery-btn gallery-next" id="galleryNext">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
-                <div class="gallery-placeholder">
-                    <i class="fas fa-images"></i>
-                    <h3>Próximamente</h3>
-                    <p>Más fotos de nuestros proyectos se agregarán pronto</p>
-                </div>
-                <div class="gallery-placeholder">
-                    <i class="fas fa-camera"></i>
-                    <h3>En Desarrollo</h3>
-                    <p>Galería completa en preparación</p>
+                
+                <!-- Indicadores -->
+                <div class="gallery-indicators" id="galleryIndicators">
+                    <!-- Los indicadores se generarán dinámicamente -->
                 </div>
             </div>
         </div>
     </section>
+
+    <!-- Modal para galería -->
+    <div id="galleryModal" class="gallery-modal">
+        <div class="modal-content">
+            <span class="modal-close" id="modalClose">&times;</span>
+            <img id="modalImage" src="" alt="">
+            <div class="modal-nav">
+                <button class="modal-btn modal-prev" id="modalPrev">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="modal-btn modal-next" id="modalNext">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- Contact Section -->
     <section id="contacto" class="contact">
@@ -503,8 +533,5 @@
     </button>
 
     <script src="./assets/js/script.js"></script>
-
-
-
 </body>
 </html>
